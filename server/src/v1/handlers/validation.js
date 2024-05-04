@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 exports.validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -7,3 +8,6 @@ exports.validate = (req, res, next) => {
   }
   next();
 };
+
+//ObjectIdが有効かどうか
+exports.isObjectId = (value) => mongoose.Types.ObjectId.isValid(value);

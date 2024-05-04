@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    user.password = undefined;
+    // user.password = undefined;
     // JWTを発行
     const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
       expiresIn: "24h",

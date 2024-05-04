@@ -7,8 +7,8 @@ const tokenDecode = (req) => {
   if (bearerHeader) {
     const bearer = bearerHeader.split(" ")[1];
     try {
-      const tokenDecoded = JWT.verify(bearer, process.env.TOKEN_SECRET_KEY);
-      return tokenDecoded;
+      const decodedToken = JWT.verify(bearer, process.env.TOKEN_SECRET_KEY);
+      return decodedToken;
     } catch {
       return false;
     }
@@ -16,6 +16,7 @@ const tokenDecode = (req) => {
     return false;
   }
 };
+
 // JWT認証を検証するためのミドルウェア
 exports.verifyToken = async (req, res, next) => {
   const tokenDecoded = tokenDecode(req);
