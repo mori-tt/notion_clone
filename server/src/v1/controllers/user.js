@@ -26,26 +26,28 @@ exports.login = async (req, res) => {
   const { username, password } = req.body;
   try {
     // DBからユーザーが存在するか探してくる
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ username }).select("password username");
     if (!user) {
       return res.status(401).json({
-        errors: {
-          params: "username",
-          message: "ユーザーが無効です",
-        },
+        errors: [
+          {
+            param: "username",
+            msg: "ユーザーが無効です",
+          },
+        ],
       });
     }
     // パスワードが合っているか照合する
-    const descryptedPassword = CryptoJS.AES.decrypt(
+    const decryptedPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.SECRET_KEY
     ).toString(CryptoJS.enc.Utf8);
 
-    if (descryptedPassword !== password) {
+    if (decryptedPassword !== password) {
       return res.status(401).json({
         errors: {
-          params: "password",
-          message: "パスワードが無効です",
+          param: "password",
+          msg: "パスワードが無効です",
         },
       });
     }
